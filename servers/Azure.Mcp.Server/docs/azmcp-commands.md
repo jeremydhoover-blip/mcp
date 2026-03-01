@@ -547,25 +547,80 @@ azmcp appservice database add --subscription "my-subscription" \
 ```bash
 # Get App Service Web App details
 # ❌ Destructive | ✅ Idempotent | ❌ OpenWorld | ✅ ReadOnly | ❌ Secret | ❌ LocalRequired
-azmcp appservice webapps get --subscription <subscription> \
-                             [--resource-group <resource-group>] \
-                             [--app <app>]
+azmcp appservice webapp get --subscription <subscription> \
+                            [--resource-group <resource-group>] \
+                            [--app <app>]
 
 # Examples:
 # List the App Service Web Apps details in a subscription
 # ❌ Destructive | ✅ Idempotent | ❌ OpenWorld | ✅ ReadOnly | ❌ Secret | ❌ LocalRequired
-azmcp appservice webapps get --subscription "my-subscription"
+azmcp appservice webapp get --subscription "my-subscription"
 
 # List the App Service Web Apps details in a resource group
 # ❌ Destructive | ✅ Idempotent | ❌ OpenWorld | ✅ ReadOnly | ❌ Secret | ❌ LocalRequired
-azmcp appservice webapps get --subscription "my-subscription" \
-                             --resource-group "my-resource-group"
+azmcp appservice webapp get --subscription "my-subscription" \
+                            --resource-group "my-resource-group"
 
 # Get the details for a specific App Service Web App
 # ❌ Destructive | ✅ Idempotent | ❌ OpenWorld | ✅ ReadOnly | ❌ Secret | ❌ LocalRequired
-azmcp appservice webapps get --subscription "my-subscription" \
-                             --resource-group "my-resource-group" \
-                             --app "my-app"
+azmcp appservice webapp get --subscription "my-subscription" \
+                            --resource-group "my-resource-group" \
+                            --app "my-app"
+```
+
+#### Web App Application Settings
+
+```bash
+# Get application settings for an App Service Web App
+# ❌ Destructive | ✅ Idempotent | ❌ OpenWorld | ✅ ReadOnly | ✅ Secret | ❌ LocalRequired
+azmcp appservice webapp settings get-appsettings --subscription <subscription> \
+                                                 --resource-group <resource-group> \
+                                                 --app <app>
+
+# Examples:
+# Get the application settings for an App Service Web App
+# ❌ Destructive | ✅ Idempotent | ❌ OpenWorld | ✅ ReadOnly | ✅ Secret | ❌ LocalRequired
+azmcp appservice webapp settings get-appsettings --subscription "my-subscription" \
+                                                 --resource-group "my-resource-group" \
+                                                 --app "my-app"
+```
+
+```bash
+# Update application settings for an App Service Web App
+# ✅ Destructive | ❌ Idempotent | ❌ OpenWorld | ❌ ReadOnly | ❌ Secret | ❌ LocalRequired
+azmcp appservice webapp settings update-appsettings --subscription <subscription> \
+                                                    --resource-group <resource-group> \
+                                                    --app <app> \
+                                                    --setting-name <setting-name> \
+                                                    --setting-update-type <add/set/delete> \
+                                                    [--setting-value <setting-value>]
+
+# Examples:
+# Add the application setting 'foo' with value 'bar' to an App Service Web App
+# ✅ Destructive | ❌ Idempotent | ❌ OpenWorld | ❌ ReadOnly | ❌ Secret | ❌ LocalRequired
+azmcp appservice webapp settings update-appsettings --subscription "my-subscription" \
+                                                    --resource-group "my-resource-group" \
+                                                    --app "my-app" \
+                                                    --setting-name "foo" \
+                                                    --setting-update-type "add" \
+                                                    --setting-value "bar"
+
+# Set the application setting 'fizz' with value 'buzz' to an App Service Web App
+# ✅ Destructive | ❌ Idempotent | ❌ OpenWorld | ❌ ReadOnly | ❌ Secret | ❌ LocalRequired
+azmcp appservice webapp settings update-appsettings --subscription "my-subscription" \
+                                                    --resource-group "my-resource-group" \
+                                                    --app "my-app" \
+                                                    --setting-name "fizz" \
+                                                    --setting-update-type "set" \
+                                                    --setting-value "buzz"
+
+# Delete the application setting 'baz' from an App Service Web App
+# ✅ Destructive | ❌ Idempotent | ❌ OpenWorld | ❌ ReadOnly | ❌ Secret | ❌ LocalRequired
+azmcp appservice webapp settings update-appsettings --subscription "my-subscription" \
+                                                    --resource-group "my-resource-group" \
+                                                    --app "my-app" \
+                                                    --setting-name "baz" \
+                                                    --setting-update-type "delete"
 ```
 
 ### Azure CLI Operations
@@ -871,9 +926,13 @@ azmcp acr registry repository list --subscription <subscription> \
 ### Azure Cosmos DB Operations
 
 ```bash
-# List Cosmos DB accounts in a subscription
+# List Cosmos DB resources (accounts, databases, or containers) in a subscription.
+# Omit --account to list accounts. Provide --account to list databases.
+# Provide --account and --database to list containers.
 # ❌ Destructive | ✅ Idempotent | ❌ OpenWorld | ✅ ReadOnly | ❌ Secret | ❌ LocalRequired
-azmcp cosmos account list --subscription <subscription>
+azmcp cosmos list --subscription <subscription> \
+                  [--account <account>] \
+                  [--database <database>]
 
 # Query items in a Cosmos DB container
 # ❌ Destructive | ✅ Idempotent | ❌ OpenWorld | ✅ ReadOnly | ❌ Secret | ❌ LocalRequired
@@ -882,17 +941,6 @@ azmcp cosmos database container item query --subscription <subscription> \
                                            --database <database> \
                                            --container <container> \
                                            [--query "SELECT * FROM c"]
-
-# List containers in a Cosmos DB database
-# ❌ Destructive | ✅ Idempotent | ❌ OpenWorld | ✅ ReadOnly | ❌ Secret | ❌ LocalRequired
-azmcp cosmos database container list --subscription <subscription> \
-                                     --account <account> \
-                                     --database <database>
-
-# List databases in a Cosmos DB account
-# ❌ Destructive | ✅ Idempotent | ❌ OpenWorld | ✅ ReadOnly | ❌ Secret | ❌ LocalRequired
-azmcp cosmos database list --subscription <subscription> \
-                           --account <account>
 ```
 
 ### Azure Data Explorer Operations
